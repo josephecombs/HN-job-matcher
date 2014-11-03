@@ -1,0 +1,1 @@
+Hi everyone.  I want to use Nokogiri to parse the Hacker News jobs thread.
