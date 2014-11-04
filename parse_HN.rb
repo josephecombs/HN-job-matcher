@@ -25,8 +25,9 @@ def hashify_emails(comments_arr)
   emails_comments = {}
   
   comments_arr.each do |comment|
-    if comment.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)[0]
-      email_address = comment.match
+    if comment.to_s.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)
+      email_address = comment.to_s.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)[0]
+      emails_comments[email_address] = comment.text
     end
   end
   
@@ -34,10 +35,16 @@ def hashify_emails(comments_arr)
 end
 
 def test_regex
+  #proves my regex works
+  textblob = "aslkhalghakghaawghalga sfgaga asdg a !!! DFAsd fasdf joseph.e.combs@gmail.com slkerhg;ahg;gasngmgjhjdhhsdhls  hhj3548348 3452 3452 "
+  if textblob.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)
+    email_address = textblob.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)[0]
+  end
   
+  puts email_address
 end
 
 
-
+# test_regex
 # scrape_file
 scrape_site
