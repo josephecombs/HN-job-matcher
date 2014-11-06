@@ -61,24 +61,13 @@ def hashify_comments(comments_arr, commentors_arr)
   usernames_comments
 end
 
-def test_regex
-  #proves my regex works
-  textblob = "aslkhalghakghaawghalga sfgaga asdg a !!! DFAsd fasdf joseph.e.combs@gmail.com slkerhg;ahg;gasngmgjhjdhhsdhls  hhj3548348 3452 3452 "
-  if textblob.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)
-    email_address = textblob.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)[0]
-  end
-  
-  puts email_address
-end
+
 
 
 
 # hiring and seeking now in hashes where key is username and value is comment
 hiring = scrape_site("https://news.ycombinator.com/item?id=8542892")
 seeking = scrape_site("https://news.ycombinator.com/item?id=8542898")
-
-out_file = File.new("spit/out.txt", "w")
-out_file.puts("lol")
 
 # for each person seeking a job, score their comment relative to each hiring post
 seeking.each_pair do |seeker_username, seeking_comment|
