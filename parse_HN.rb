@@ -16,8 +16,7 @@ def scrape_site(url)
     usernames[idx] = username.to_s[17..(new_idx - 2)]
   end
 
-  usernames_comments = hashify_comments(comments, usernames)
-  usernames_comments
+  hashify_comments(comments, usernames)
 end
 
 def hashify_comments(comments_arr, commentors_arr)

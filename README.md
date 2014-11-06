@@ -2,4 +2,4 @@ Hi everyone.  I used the Nokogiri gem to parse the HN jobs threads this month, t
 
 If you posted to the "seeking a job" thread, you can look in /spit to see the ranking of jobs you should apply to based on .levenshtein_similar method's (of the amatch gem) comparison of your post to each of the "seeking" posts.
 
-PS - plz hire me!  I posted as jecjec in the hiring thread!
+PS - hire me!  I posted as jecjec in the hiring thread!
