@@ -1,39 +1,19 @@
 require 'nokogiri'
-#require 'net/http'
 require 'open-uri'
 require 'similar_text'
 
-
-def scrape_file
-  # some basics
-  doc = Nokogiri::XML(File.open("shows.xml"))
-  puts doc.css("sitcoms name") # css queries in xml!!!
-  # puts doc.xpath("//character")
-end
-
 def scrape_site(url)
-  #come back to this later
   doc = Nokogiri::HTML(open(url))  
-  # puts doc.css('title')
   comments = doc.css('.comment')
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
   usernames = usernames.select.each_with_index { |str, i| i.even? }
   usernames.each_with_index do |username, idx|
+    #TODO: parse this better
     new_idx = username.to_s[0..-1].index(">")
-    
-    # puts username.to_s[17..(new_idx - 2)]
     usernames[idx] = username.to_s[17..(new_idx - 2)]
-    # puts username.css('a')
-    # temp_username = Nokogiri::HTML(username.css('a'))
-    # puts temp_username
-    # puts temp_username.children.children.children[0].attributes["href"].value[8..-1]
   end
-  
-  puts usernames
-  
-  #.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i)[0]
-  usernames_comments = {}
+
   usernames_comments = hashify_comments(comments, usernames)
   usernames_comments
 end
@@ -60,10 +40,6 @@ def hashify_comments(comments_arr, commentors_arr)
   #returns hash of usernames and comment
   usernames_comments
 end
-
-
-
-
 
 # hiring and seeking now in hashes where key is username and value is comment
 hiring = scrape_site("https://news.ycombinator.com/item?id=8542892")
