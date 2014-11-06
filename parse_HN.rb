@@ -5,6 +5,7 @@ require 'amatch'
 
 def scrape_site(url)
   doc = Nokogiri::HTML(open(url))  
+  #TODO: need to figure out how to select exactly parent comments
   comments = doc.css('.comment')
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
@@ -35,29 +36,52 @@ def hashify_comments(comments_arr, commentors_arr)
   # end
   
   comments_arr.each_with_index do |comment, idx|
-    usernames_comments[commentors_arr[idx]] = comment.text
+    usernames_comments[commentors_arr[idx]] = dump_to_array(comment.text)
   end
   
   #returns hash of usernames and comment
   usernames_comments
 end
 
-# hiring and seeking now in hashes where key is username and value is comment
+def dump_to_array(str)
+  #strip out irrelevant characters
+  temp_str = str.gsub(/[^a-zA-Z0-9 ]/,"")
+  words_array = temp_str.split(" ")
+  words_array = words_array.map(&:downcase).uniq
+  p words_array
+  words_array
+end
+
+# this computes the percentage of 
+def jec_compare(arr1, arr2)
+  temp_denom = (arr1 + arr2).uniq
+  #calculates the percentage to which arr1's words covers the universe of words
+  #this is bad because it will match you to short comments; need to figure out how to select only parent comments with nokogiri
+  (arr1.length)/(temp_denom.length * 1.0)
+end
+
+# hiring and seeking now in hashes where key is username and value is array of words in comment
 hiring = scrape_site("https://news.ycombinator.com/item?id=8542892")
 seeking = scrape_site("https://news.ycombinator.com/item?id=8542898")
 
 # for each person seeking a job, score their comment relative to each hiring post
 seeking.each_pair do |seeker_username, seeking_comment|
-  # keys are similarity, values are the person wanting hiring
+  i = 0
   score_rank = {}
   hiring.each_pair do |hirer_username, hiring_comment|
-    score = hiring_comment.levenshtein_similar(seeking_comment)
+    
+    score = jec_compare(seeking_comment, hiring_comment)
+    #introduce randomness because I think some results are being overwritten
+    score = score - (Random.rand(0..1000) / 100000000.0)
+    i += 1
     score_rank[score] = hirer_username
   end
   
+  puts i
   #this will actually turn score_rank into an array
   score_rank = score_rank.sort
   score_rank = score_rank.reverse
+  
   out_file = File.new("spit/" + seeker_username + ".txt", "w")
   
   score_rank.each do |pair|
