@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
 require 'similar_text'
+require 'amatch'
 
 def scrape_site(url)
   doc = Nokogiri::HTML(open(url))  
@@ -50,7 +51,7 @@ seeking.each_pair do |seeker_username, seeking_comment|
   # keys are similarity, values are the person wanting hiring
   score_rank = {}
   hiring.each_pair do |hirer_username, hiring_comment|
-    score = hiring_comment.similar(seeking_comment)
+    score = hiring_comment.levenshtein_similar(seeking_comment)
     score_rank[score] = hirer_username
   end
   
