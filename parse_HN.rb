@@ -8,6 +8,7 @@ def scrape_site(url)
   #TODO: need to figure out how to select exactly parent comments
   # the issue is that replies are being treated as relevant
   comments = doc.css('.comment')
+  #
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
   usernames = usernames.select.each_with_index { |str, i| i.even? }
@@ -36,6 +37,7 @@ def hashify_comments(comments_arr, commentors_arr)
   # end
   
   comments_arr.each_with_index do |comment, idx|
+    puts comment.methods
     usernames_comments[commentors_arr[idx]] = dump_to_array(comment.text)
   end
   
@@ -48,7 +50,6 @@ def dump_to_array(str)
   temp_str = str.gsub(/[^a-zA-Z0-9 ]/,"")
   words_array = temp_str.split(" ")
   words_array = words_array.map(&:downcase).uniq
-  p words_array
   words_array
 end
 
