@@ -6,6 +6,7 @@ require 'amatch'
 def scrape_site(url)
   doc = Nokogiri::HTML(open(url))  
   #TODO: need to figure out how to select exactly parent comments
+  # the issue is that replies are being treated as relevant
   comments = doc.css('.comment')
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
