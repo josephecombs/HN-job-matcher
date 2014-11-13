@@ -14,19 +14,7 @@ def scrape_site(url)
   # images will have 2 extraneous images at the start and 2 extraneous images at the end
   images = doc.css('img')[2..(images_length - 2)]
   comments = doc.css('.comment')
-  
-  
-  puts images.length
-  puts comments.length
-  
-  # puts images.first
-  # puts comments.first
-  
-  puts images.last
-  puts comments.last
-  
-  sleep(100)
-  # 
+ 
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
   usernames = usernames.select.each_with_index { |str, i| i.even? }
@@ -56,7 +44,7 @@ def hashify_comments(comments_arr, commentors_arr, images_arr)
   
   comments_arr.each_with_index do |comment, idx|
     #check if the comment is a parent comment; width of corresponding image determines whether a comment is one we care about or not, specifically a width of zero
-    if images_arr[idx].attributes['width'].value == 0
+    if images_arr[idx].attributes['width'].value == "0"
       usernames_comments[commentors_arr[idx]] = dump_to_array(comment.text)
     end
   end
