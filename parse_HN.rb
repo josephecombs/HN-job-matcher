@@ -65,7 +65,8 @@ end
 def jec_compare(arr1, arr2)
   temp_denom = (arr1 + arr2).uniq
   #calculates the percentage to which arr1's words covers the universe of words
-  #this is bad because it will match you to short comments; need to figure out how to select only parent comments with nokogiri
+  
+  #TODO: this method needs to weight the types of terms being matched, for example, the word 'JavaScript' needs to be worth far more than the word 'a'.  Need to find some dictionary of IT terms
   (arr1.length)/(temp_denom.length * 1.0)
 end
 
