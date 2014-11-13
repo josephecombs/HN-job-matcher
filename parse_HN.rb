@@ -70,33 +70,34 @@ def jec_compare(arr1, arr2)
   (arr1.length)/(temp_denom.length * 1.0)
 end
 
-# hiring and seeking now in hashes where key is username and value is array of words in comment
-hiring = scrape_site("https://news.ycombinator.com/item?id=8542892")
-seeking = scrape_site("https://news.ycombinator.com/item?id=8542898")
-
-# for each person seeking a job, score their comment relative to each hiring post
-seeking.each_pair do |seeker_username, seeking_comment|
-  i = 0
-  score_rank = {}
-  hiring.each_pair do |hirer_username, hiring_comment|
+def generate_reports(hiring_url, seeking_url)
+  hiring = scrape_site(hiring_url)
+  seeking = scrape_site(seeking_url)
+  seeking.each_pair do |seeker_username, seeking_comment|
+    i = 0
+    score_rank = {}
+    hiring.each_pair do |hirer_username, hiring_comment|
     
-    score = jec_compare(seeking_comment, hiring_comment)
-    #introduce randomness because I think some results are being overwritten
-    score = score - (Random.rand(0..1000) / 100000000.0)
-    i += 1
-    score_rank[score] = hirer_username
+      score = jec_compare(seeking_comment, hiring_comment)
+      #introduce randomness because I think some results are being overwritten
+      score = score - (Random.rand(0..1000) / 100000000.0)
+      i += 1
+      score_rank[score] = hirer_username
+    end
+  
+    puts i
+    #this will actually turn score_rank into an array
+    score_rank = score_rank.sort
+    score_rank = score_rank.reverse
+  
+    out_file = File.new("spit/" + seeker_username + ".txt", "w")
+  
+    score_rank.each do |pair|
+      out_file.puts("hiring_manager: " + pair[1] + "; similarity_score: " + pair[0].to_s[0..6])
+    end
+  
+    puts "analyzed one job seeker's post"
   end
-  
-  puts i
-  #this will actually turn score_rank into an array
-  score_rank = score_rank.sort
-  score_rank = score_rank.reverse
-  
-  out_file = File.new("spit/" + seeker_username + ".txt", "w")
-  
-  score_rank.each do |pair|
-    out_file.puts("hiring_manager: " + pair[1] + "; similarity_score: " + pair[0].to_s[0..6])
-  end
-  
-  puts "analyzed one job seeker's post"
 end
+
+generate_reports("https://news.ycombinator.com/item?id=8542892", "https://news.ycombinator.com/item?id=8542898")
