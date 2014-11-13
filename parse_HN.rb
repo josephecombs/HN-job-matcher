@@ -7,8 +7,26 @@ def scrape_site(url)
   doc = Nokogiri::HTML(open(url))  
   #TODO: need to figure out how to select exactly parent comments
   # the issue is that replies are being treated as relevant
+  
+  # 'images' array will be used to determine whether or not a comment is a parent comment
+  images_length = doc.css('img').length
+  
+  # images will have 2 extraneous images at the start and 2 extraneous images at the end
+  images = doc.css('img')[2..(images_length - 2)]
   comments = doc.css('.comment')
-  #
+  
+  
+  puts images.length
+  puts comments.length
+  
+  # puts images.first
+  # puts comments.first
+  
+  puts images.last
+  puts comments.last
+  
+  sleep(100)
+  # 
   usernames = doc.css('.comhead > a')
   # purify usernames a bit
   usernames = usernames.select.each_with_index { |str, i| i.even? }
@@ -18,10 +36,10 @@ def scrape_site(url)
     usernames[idx] = username.to_s[17..(new_idx - 2)]
   end
 
-  hashify_comments(comments, usernames)
+  hashify_comments(comments, usernames, images)
 end
 
-def hashify_comments(comments_arr, commentors_arr)
+def hashify_comments(comments_arr, commentors_arr, images_arr)
   usernames_comments = {}
   # turn off email matching for now
   # i = 0
@@ -37,11 +55,13 @@ def hashify_comments(comments_arr, commentors_arr)
   # end
   
   comments_arr.each_with_index do |comment, idx|
-    puts comment.methods
-    usernames_comments[commentors_arr[idx]] = dump_to_array(comment.text)
+    #check if the comment is a parent comment; width of corresponding image determines whether a comment is one we care about or not, specifically a width of zero
+    if images_arr[idx].attributes['width'].value == 0
+      usernames_comments[commentors_arr[idx]] = dump_to_array(comment.text)
+    end
   end
   
-  #returns hash of usernames and comment
+  #returns hash of usernames and comment text
   usernames_comments
 end
 
