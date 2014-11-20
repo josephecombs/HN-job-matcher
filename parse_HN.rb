@@ -91,7 +91,11 @@ def generate_reports(hiring_url, seeking_url, output_dir)
     out_file = File.new(output_dir + "/" + seeker_username + ".txt", "w")
   
     score_rank.each do |pair|
-      out_file.puts("hiring_manager: " + pair[1] + "; similarity_score: " + pair[0].to_s[0..6])
+      if output_dir == "reports_for_job_seekers"
+        out_file.puts("hiring_manager: " + pair[1] + "; similarity_score: " + pair[0].to_s[0..6])
+      else
+        out_file.puts("job_seeker: " + pair[1] + "; similarity_score: " + pair[0].to_s[0..6])
+      end
     end
   
   end
