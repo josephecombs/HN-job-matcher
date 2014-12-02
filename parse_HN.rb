@@ -9,7 +9,7 @@ def scrape_site(url)
   # the issue is that replies are being treated as relevant
   
   # 'images' array will be used to determine whether or not a comment is a parent comment
-  images_length = doc.css('img').length
+  images_length = doc.css('img').length 
   
   # images will have 2 extraneous images at the start and 2 extraneous images at the end
   images = doc.css('img')[2..(images_length - 2)]
@@ -61,7 +61,7 @@ def dump_to_array(str)
   words_array
 end
 
-# this computes the percentage of 
+# this computes the proportion of your words that are in the set of your words + someone else's words
 def jec_compare(arr1, arr2)
   temp_denom = (arr1 + arr2).uniq
   #calculates the percentage to which arr1's words covers the universe of words
@@ -101,5 +101,5 @@ def generate_reports(hiring_url, seeking_url, output_dir)
   end
 end
 
-generate_reports("https://news.ycombinator.com/item?id=8542892", "https://news.ycombinator.com/item?id=8542898", "reports_for_job_seekers")
-generate_reports("https://news.ycombinator.com/item?id=8542898", "https://news.ycombinator.com/item?id=8542892", "reports_for_hiring_managers")
+generate_reports("https://news.ycombinator.com/item?id=8681040", "https://news.ycombinator.com/item?id=8681043", "reports_for_job_seekers")
+generate_reports("https://news.ycombinator.com/item?id=8681043", "https://news.ycombinator.com/item?id=8681040", "reports_for_hiring_managers")
